@@ -1,0 +1,23 @@
+   _____                    
+  /\ |  \                   
+ |  \    |_ __   ___ _ __   
+ |---.  -| '_ \ / _ \ '_ \  
+ |       | |_) |  __/ | | | 
+  \__|__/| .__/ \___|_| |_| 
+         | |                
+   _____ |_|           _    
+  / ____| |          | |   
+ | |    | | ___   ___| | __
+ | |    | |/ _ \ / __| |/ /
+ | |____| | (_) | (__|   < 
+  \_____|_|\___/ \___|_|\_\                 
+Open Clock based on Debian GNU/Linux
+GitHub: https://github.com/open-clock/OpenClock
+Website: http://open-clock.org
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
