@@ -24,13 +24,22 @@ BOOT_PART_START=$((ALIGN))
 BOOT_PART_SIZE=$(((BOOT_SIZE + ALIGN - 1) / ALIGN * ALIGN))
 ROOT_PART_START=$((BOOT_PART_START + BOOT_PART_SIZE))
 ROOT_PART_SIZE=$(((ROOT_SIZE + ROOT_MARGIN + ALIGN  - 1) / ALIGN * ALIGN))
-IMG_SIZE=$((BOOT_PART_START + BOOT_PART_SIZE + ROOT_PART_SIZE))
+
+BOOT2_PART_START=$((ROOT_PART_START + ROOT_PART_SIZE))
+BOOT2_PART_SIZE=$(((BOOT_SIZE + ALIGN - 1) / ALIGN * ALIGN))
+ROOT2_PART_START=$((BOOT2_PART_START + BOOT2_PART_SIZE))
+ROOT2_PART_SIZE=$(((ROOT_SIZE + ROOT_MARGIN + ALIGN  - 1) / ALIGN * ALIGN))
+
+IMG_SIZE=$((BOOT_PART_START + BOOT_PART_SIZE + ROOT_PART_SIZE + BOOT2_PART_SIZE + ROOT2_PART_SIZE))
 
 truncate -s "${IMG_SIZE}" "${IMG_FILE}"
 
 parted --script "${IMG_FILE}" mklabel msdos
 parted --script "${IMG_FILE}" unit B mkpart primary fat32 "${BOOT_PART_START}" "$((BOOT_PART_START + BOOT_PART_SIZE - 1))"
 parted --script "${IMG_FILE}" unit B mkpart primary ext4 "${ROOT_PART_START}" "$((ROOT_PART_START + ROOT_PART_SIZE - 1))"
+
+parted --script "${IMG_FILE}" unit B mkpart primary fat32 "${BOOT2_PART_START}" "$((BOOT2_PART_START + BOOT2_PART_SIZE - 1))"
+parted --script "${IMG_FILE}" unit B mkpart primary ext4 "${ROOT2_PART_START}" "$((ROOT2_PART_START + ROOT2_PART_SIZE - 1))"
 
 echo "Creating loop device..."
 cnt=0
@@ -48,6 +57,8 @@ done
 ensure_loopdev_partitions "$LOOP_DEV"
 BOOT_DEV="${LOOP_DEV}p1"
 ROOT_DEV="${LOOP_DEV}p2"
+BOOT2_DEV="${LOOP_DEV}p3"
+ROOT2_DEV="${LOOP_DEV}p4"
 
 ROOT_FEATURES="^huge_file"
 for FEATURE in 64bit; do
@@ -64,10 +75,19 @@ fi
 
 mkdosfs -n bootfs -F "$FAT_SIZE" -s 4 -v "$BOOT_DEV" > /dev/null
 mkfs.ext4 -L rootfs -O "$ROOT_FEATURES" "$ROOT_DEV" > /dev/null
+mkdosfs -n bootfs -F "$FAT_SIZE" -s 4 -v "$BOOT2_DEV" > /dev/null
+mkfs.ext4 -L rootfs -O "$ROOT_FEATURES" "$ROOT2_DEV" > /dev/null
 
 mount -v "$ROOT_DEV" "${ROOTFS_DIR}" -t ext4
 mkdir -p "${ROOTFS_DIR}/boot/firmware"
+mkdir -p "${ROOTFS_DIR}/tryboot"
 mount -v "$BOOT_DEV" "${ROOTFS_DIR}/boot/firmware" -t vfat
+mount -v "$BOOT_DEV" "${ROOTFS_DIR}/tryboot" -t vfat
+
+mkdir -p "${ROOTFS_DIR}_2"
+mount -v "$ROOT2_DEV" "${ROOTFS_DIR}_2" -t ext4
+mkdir -p "${ROOTFS_DIR}_2/boot/firmware"
+mount -v "$BOOT2_DEV" "${ROOTFS_DIR}_2/boot/firmware" -t vfat
 
 rsync -aHAXx --exclude /var/cache/apt/archives --exclude /boot/firmware "${EXPORT_ROOTFS_DIR}/" "${ROOTFS_DIR}/"
 rsync -rtx "${EXPORT_ROOTFS_DIR}/boot/firmware/" "${ROOTFS_DIR}/boot/firmware/"

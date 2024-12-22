@@ -93,10 +93,24 @@ if hash syft 2>/dev/null; then
 		-o spdx-json="${SBOM_FILE}"
 fi
 
+# Copy all files to second partition set
+rsync -aHAXx --exclude /var/cache/apt/archives --exclude /boot/firmware "${ROOTFS_DIR}/" "${ROOTFS_DIR}_2/"
+rsync -rtx "${ROOTFS_DIR}/boot/firmware/" "${ROOTFS_DIR}_2/boot/firmware/"
+
+# Replace fstab and cmdline with second versions for second partition set
+cp "${ROOTFS_DIR}/etc/fstab2" "${ROOTFS_DIR}_2/etc/fstab"
+cp "${ROOTFS_DIR}/boot/firmware/cmdline2.txt" "${ROOTFS_DIR}_2/boot/firmware/cmdline.txt"
+
+ROOT2_DEV="$(awk "\$2 == \"${ROOTFS_DIR}_2\" {print \$1}" /etc/mtab)"
+# Clean up mounts for second partition set
+unmount "${ROOTFS_DIR}_2"
+
+# Now proceed with original unmounting sequence
 ROOT_DEV="$(awk "\$2 == \"${ROOTFS_DIR}\" {print \$1}" /etc/mtab)"
 
 unmount "${ROOTFS_DIR}"
 zerofree "${ROOT_DEV}"
+zerofree "${ROOT2_DEV}"
 
 unmount_image "${IMG_FILE}"
 
