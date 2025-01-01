@@ -4,6 +4,9 @@ openssl req -x509 -newkey rsa:4096 -sha256 -days 36500 -nodes -keyout "${ROOTFS_
 
 install -m 644 files/default.conf "${ROOTFS_DIR}/etc/nginx/sites-available/default"
 
-(cd files/ui/webui && bun install && bun run build --no-lint)
+(cd files/ui/webui && ~/.bun/bin/bun install && ~/.bun/bin/bun run build --no-lint)
 
-install -m 644 files/ui/webui/out "${ROOTFS_DIR}/var/www/html"
+rm "${ROOTFS_DIR}/var/www/html/index.nginx-debian.html"
+cp -r files/ui/webui/out/* "${ROOTFS_DIR}/var/www/html/"
+chmod -R 644 "${ROOTFS_DIR}/var/www/html"
+chmod -R +X "${ROOTFS_DIR}/var/www/html"
