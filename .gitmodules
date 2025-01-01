@@ -1,0 +1,3 @@
+[submodule "stage2-openclock/02-webserver/files/ui"]
+	path = stage2-openclock/02-webserver/files/ui
+	url = https://github.com/open-clock/OpenClock.git

@@ -25,6 +25,11 @@ dosfstools libarchive-tools libcap2-bin grep rsync xz-utils file git curl bc \
 gpg pigz xxd arch-test
 ```
 
+Bun is also required:
+```bash
+curl -fsSL https://bun.sh/install | bash
+```
+
 The file `depends` contains a list of tools needed.  The format of this
 package is `<tool>[:<debian-package>]`.
 
