@@ -1,1 +1,5 @@
 python3-pip
+build-essential
+cmake
+libdbus-glib-1-dev
+libgirepository1.0-dev
