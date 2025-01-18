@@ -1,0 +1,11 @@
+[Unit]
+Description=Show shutdown splash
+DefaultDependencies=no
+Before=shutdown.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /displaydriver/shutdowndriver.py
+
+[Install]
+WantedBy=halt.target reboot.target shutdown.target
