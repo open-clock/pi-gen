@@ -19,6 +19,9 @@ mkdir -p "${ROOTFS_DIR}/displaydriver"
 install -m 644 files/bootsplashdriver.py "${ROOTFS_DIR}/displaydriver/bootsplashdriver.py"
 install -m 644 files/shutdowndriver.py "${ROOTFS_DIR}/displaydriver/shutdowndriver.py"
 install -m 644 files/clear.py "${ROOTFS_DIR}/displaydriver/clear.py"
+install -m 644 files/driver.py "${ROOTFS_DIR}/displaydriver/driver.py"
+install -m 644 files/Geist-Regular.ttf "${ROOTFS_DIR}/displaydriver/Geist-Regular.ttf"
+install -m 644 files/GeistMono-Regular.ttf "${ROOTFS_DIR}/displaydriver/GeistMono-Regular.ttf"
 
 install -m 644 files/boot.png "${ROOTFS_DIR}/displaydriver/boot.png"
 install -m 644 files/shutdown.png "${ROOTFS_DIR}/displaydriver/shutdown.png"
@@ -33,4 +36,10 @@ install -m 644 files/splash-shutdown.service "${ROOTFS_DIR}/etc/systemd/system/s
 
 on_chroot << EOF
     systemctl enable splash-shutdown
+EOF
+
+install -m 644 files/displaydriver.service "${ROOTFS_DIR}/etc/systemd/system/displaydriver.service"
+
+on_chroot << EOF
+    systemctl enable displaydriver
 EOF

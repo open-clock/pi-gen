@@ -1,7 +1,9 @@
 [Unit]
 Description=Show shutdown splash
 DefaultDependencies=no
-Before=shutdown.target
+Before=shutdown.targe
+After=displaydriver.service
+Conflicts=displaydriver.servicet
 
 [Service]
 Type=oneshot

@@ -3,6 +3,10 @@ from PIL import Image
 import os
 
 if os.path.exists("/displaydriver/skipshutdown"):
+    epd = epd7in5_V2.EPD()
+    epd.init_fast()
+    epd.Clear()
+    epd.sleep()
     exit()
 
 epd = epd7in5_V2.EPD()
