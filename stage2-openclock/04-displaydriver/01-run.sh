@@ -5,6 +5,10 @@ chmod -R 644 "${ROOTFS_DIR}/epd-lib"
 chmod -R +X "${ROOTFS_DIR}/epd-lib"
 
 on_chroot << EOF
+    pip3 install --no-cache-dir --break-system-packages pillow
+EOF
+
+on_chroot << EOF
 	cd /epd-lib
     pip3 install --no-cache-dir --break-system-packages .
 EOF
