@@ -1,7 +1,7 @@
 [Unit]
 Description=Show shutdown splash
 DefaultDependencies=no
-Before=shutdown.targe
+Before=shutdown.target
 After=displaydriver.service
 Conflicts=displaydriver.servicet
 
