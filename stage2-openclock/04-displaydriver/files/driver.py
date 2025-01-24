@@ -160,7 +160,7 @@ try:
     except (KeyboardInterrupt, SystemExit):
         epd.sleep()
         print("Exiting...")
-        raise KeyboardInterrupt
+        #raise KeyboardInterrupt
 
 except IOError as e:
     print(e)
