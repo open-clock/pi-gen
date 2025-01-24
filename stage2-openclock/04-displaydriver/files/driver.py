@@ -9,6 +9,8 @@ import time
 EPD_WIDTH       = 800
 EPD_HEIGHT      = 480
 
+WALLMOUNT = False
+
 #GRAY1  = 0xff #white
 #GRAY2  = 0xC0
 #GRAY3  = 0x80 #gray
@@ -130,6 +132,10 @@ def drawScreen():
     draw.line((CENTER_X, 128 + 14, CENTER_X + hxdiff, 128 + 14 - hydiff), fill=GRAY4, width=2) # Hour hand
     draw.line((CENTER_X, 128 + 14, CENTER_X + mxdiff, 128 + 14 - mydiff), fill=GRAY4, width=2) # Minute hand
     draw.line((CENTER_X, 128 + 14, CENTER_X + sxdiff, 128 + 14 - sydiff), fill=GRAY4, width=2) # Second hand
+
+    if not WALLMOUNT:
+        image = image.transpose(Image.ROTATE_180)
+
     return image
 
 try:
