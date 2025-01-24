@@ -4,7 +4,7 @@ openssl req -x509 -newkey rsa:4096 -sha256 -days 36500 -nodes -keyout "${ROOTFS_
 
 install -m 644 files/default.conf "${ROOTFS_DIR}/etc/nginx/sites-available/default"
 
-sed -i "s/http:\/\/localhost:8000/\/api/" "files/ui/webui/lib/constants.ts"
+sed -i "s/http:\/\/openclock.local:8080/\/api/" "files/ui/webui/lib/constants.ts"
 
 (cd files/ui/webui && ~/.bun/bin/bun install && ~/.bun/bin/bun run build --no-lint)
 
